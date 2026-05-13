@@ -131,4 +131,4 @@ plt.show()
 
 
 # Result
-          <<include your Result here>>
+          The given data has been successfully read, cleaned by handling duplicates and missing values, and saved to a new file named cleaned_data.csv.

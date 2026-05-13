@@ -21,6 +21,76 @@ STEP 5: Remove outliers using IQR
 STEP 6: Use zscore of to remove outliers
 
 # Coding and Output:
+```
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import scipy.stats as stats
+import matplotlib.pyplot as plt
+
+# Read dataset
+df = pd.read_csv("SAMPLEIDS.csv")
+df
+df.head()
+df.tail()
+df.info()
+df.describe()
+df.isnull().sum()
+df.isnull().any()
+
+df.dropna()
+df.fillna(0)
+df.fillna(method='ffill')
+df.fillna({'GENDER':'MALE','NAME':'SRI'})
+
+# Iris dataset
+ir = pd.read_csv("iris.csv")
+ir
+ir.describe()
+
+# ------------------- BOXPLOT BEFORE OUTLIER REMOVAL -------------------
+sns.boxplot(x='sepal_width', data=ir)
+plt.title("Boxplot Before Removing Outliers")
+plt.show()
+
+# ------------------- SCATTER PLOT BEFORE CLEANING -------------------
+ir.plot.scatter(x='sepal_length', y='sepal_width', title="Before Removing Outliers")
+plt.show()
+
+# ------------------- IQR METHOD -------------------
+Q1 = ir.sepal_width.quantile(0.25)
+Q3 = ir.sepal_width.quantile(0.75)
+IQR = Q3 - Q1
+print(IQR)
+
+# Outliers
+ran = ir[((ir.sepal_width < (Q1 - 1.5 * IQR)) | (ir.sepal_width > (Q3 + 1.5 * IQR)))]
+ran['sepal_width']
+
+# Remove outliers
+ran = ir[~((ir.sepal_width < (Q1 - 1.5 * IQR)) | (ir.sepal_width > (Q3 + 1.5 * IQR)))]
+ran['sepal_width']
+
+# ------------------- BOXPLOT AFTER IQR -------------------
+sns.boxplot(x='sepal_width', data=ran)
+plt.title("Boxplot After IQR")
+plt.show()
+
+# ------------------- SCATTER AFTER IQR -------------------
+ran.plot.scatter(x='sepal_length', y='sepal_width', title="After IQR Outlier Removal")
+plt.show()
+
+# ------------------- Z-SCORE METHOD -------------------
+z = np.abs(stats.zscore(ir['petal_length']))
+z
+
+ir1 = ir[z < 3]
+ir1
+
+# ------------------- SCATTER AFTER Z-SCORE -------------------
+ir1.plot.scatter(x='petal_length', y='petal_width', title="After Z-score Outlier Removal")
+plt.show()
+```
 
 <img width="510" height="425" alt="Screenshot 2026-05-13 162108" src="https://github.com/user-attachments/assets/50f9824f-a6cb-4a1f-8b4a-d4f83830359c" />
 <img width="1007" height="716" alt="Screenshot 2026-05-13 162150" src="https://github.com/user-attachments/assets/24734dde-4a45-4c7f-b61d-af365bb8b7cb" />
